@@ -1,7 +1,11 @@
+DUMP_FOLDER = 'dumps/'
+SAVE_WEIGHTS_PATH = DUMP_FOLDER + 'weights.pth'
+SAVE_METRICS_PATH = DUMP_FOLDER + 'metrics.pkl'
+
 DATASET_PATHS = {
     'main_path': 'imagewoof2/',
     'train': 'imagewoof2/train/',
-    'test': 'imagewoof2/test/',
+    'val': 'imagewoof2/val/',
     'labels': 'imagewoof2/noisy_imagewoof.csv'
 }
 

@@ -4,7 +4,8 @@ import numpy as np
 import albumentations as albu
 from torch.utils.data.dataset import Dataset
 from src.tools import read_image
-from config import CNFG
+from src.config import CNFG
+from sklearn.model_selection import train_test_split
 
 
 train_transforms = albu.Compose([
@@ -19,16 +20,22 @@ train_transforms = albu.Compose([
 ])
 
 
-test_transforms = albu.Compose([
+val_transforms = albu.Compose([
     albu.Resize(CNFG['img_size'], CNFG['img_size']),
     albu.Normalize()
 ])
 
 
+def split_img_list(img_name_list, test_size):
+    res = tuple(train_test_split(range(len(img_name_list)), test_size=test_size))
+    files = np.array(img_name_list)
+    return files[res[0]], files[res[1]]
+
+
 class WoofDataset(Dataset):
-    def __init__(self, files, class_index, data_path, transforms, mode):
+    def __init__(self, files, labels, data_path, transforms, mode):
         self.files = files
-        self.class_index = class_index
+        self.labels = labels
         self.data_path = data_path
         self.transforms = transforms
         self.mode = mode
@@ -40,7 +47,7 @@ class WoofDataset(Dataset):
         img = read_image(os.path.join(self.data_path, self.files[index]))
         augm_img = self.transforms(image=img)['image']
         if self.mode == 'train':
-            return augm_img, self.class_index
+            return augm_img, self.labels[index]
         else:
             return augm_img
 

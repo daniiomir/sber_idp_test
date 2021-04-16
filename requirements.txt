@@ -1,0 +1,5 @@
+torch==1.8.1+cu102
+numpy==1.20.2
+opencv-python==4.5.1.48
+tabulate==0.8.9
+albumentations==0.5.2

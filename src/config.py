@@ -11,7 +11,8 @@ DATASET_PATHS = {
 
 CNFG = {
     'seed': 42,
-    'img_size': 400,
+    'device': 'cuda:0',
+    'img_size': 256,
     'batch_size': 10,
     'lr': 1e-3,
 
@@ -20,7 +21,5 @@ CNFG = {
     'esr': 5,
     'num_workers': 0,
     'model_arch': 'tf_efficientnet_b4_ns',
-    'device': 'cpu',
-    # 'tta': 5,
     'grad_clip': 5
 }

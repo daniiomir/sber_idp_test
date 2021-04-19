@@ -1,4 +1,5 @@
 import os
+import torch
 import random
 import numpy as np
 import albumentations as albu
@@ -47,7 +48,7 @@ class WoofDataset(Dataset):
         img = read_image(os.path.join(self.data_path, self.files[index]))
         augm_img = self.transforms(image=img)['image']
         if self.mode == 'train':
-            return augm_img, self.labels[index]
+            return augm_img, torch.from_numpy(np.asarray(self.labels[index]))
         else:
             return augm_img
 

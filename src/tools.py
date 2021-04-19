@@ -7,6 +7,7 @@ import os
 import pickle
 from collections import defaultdict
 from tabulate import tabulate
+from sklearn.metrics import precision_score, recall_score, f1_score
 
 
 def seed_everything(seed):
@@ -100,12 +101,19 @@ class MetricStorer:
         vals = [
             self.stored_metrics['epoch_n'][-1],
             self.stored_metrics['time'][-1],
-            self.stored_metrics['test_loss'][-1],
+            self.stored_metrics['val_loss'][-1],
             self.stored_metrics['train_loss'][-1],
-            self.stored_metrics['test_acc'][-1],
-            self.stored_metrics['train_acc'][-1]
+            self.stored_metrics['val_acc'][-1],
+            self.stored_metrics['train_acc'][-1],
+            self.stored_metrics['val_prec'][-1],
+            self.stored_metrics['train_prec'][-1],
+            self.stored_metrics['val_recall'][-1],
+            self.stored_metrics['train_recall'][-1],
+            self.stored_metrics['val_fscore'][-1],
+            self.stored_metrics['train_fscore'][-1],
         ]
-        headers = ['epoch_n', 'time', 'test_loss', 'train_loss', 'test_acc', 'train_acc']
+        headers = ['epoch_n', 'time', 'val_loss', 'train_loss', 'val_acc', 'train_acc', 'val_prec', 'train_prec',
+                   'val_recall', 'train_recall', 'val_fscore', 'train_fscore']
         if inplace:
             print(tabulate([vals], headers))
         target_vals = self.stored_metrics[self.esr_metric]
@@ -127,3 +135,18 @@ class MetricStorer:
         pred, real = self.to_numpy(pred), self.to_numpy(real)
         res = np.mean(pred == real)
         self.temp_metrics[foldname + '_acc'].append(res)
+
+    def prec(self, pred, real, foldname):
+        pred, real = self.to_numpy(pred), self.to_numpy(real)
+        res = precision_score(real, pred, average='micro')
+        self.temp_metrics[foldname + '_prec'].append(res)
+
+    def recall(self, pred, real, foldname):
+        pred, real = self.to_numpy(pred), self.to_numpy(real)
+        res = recall_score(real, pred, average='micro')
+        self.temp_metrics[foldname + '_recall'].append(res)
+
+    def fscore(self, pred, real, foldname):
+        pred, real = self.to_numpy(pred), self.to_numpy(real)
+        res = f1_score(real, pred, average='micro')
+        self.temp_metrics[foldname + '_fscore'].append(res)

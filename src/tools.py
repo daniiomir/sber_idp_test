@@ -28,7 +28,7 @@ def read_image(img_path):
 
 
 class MetricStorer:
-    def __init__(self, metrics, raw_names, folds, path, esr_metric='test_loss', esr=3, esr_minimize=True):
+    def __init__(self, metrics, raw_names, folds, path, esr_metric='val_loss', esr=3, esr_minimize=True):
         self.metrics = metrics
         self.folds = folds
         self.raw = {key: None for key in raw_names}
